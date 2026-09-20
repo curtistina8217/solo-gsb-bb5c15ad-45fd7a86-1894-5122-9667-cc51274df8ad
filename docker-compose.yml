@@ -1,0 +1,23 @@
+services:
+  paper-api:
+    build: .
+    image: smart-paper-api:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - paper-data:/data
+    environment:
+      # 必要配置（均有默认值，可按需覆盖）
+      PAPER_DB_PATH: /data/papers.db
+      PAPER_SEED: "20260920"
+      PAPER_SOLVER_TIME_LIMIT: "10"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  paper-data:
